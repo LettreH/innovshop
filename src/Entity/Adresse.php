@@ -29,6 +29,11 @@ class Adresse
     #[ORM\JoinColumn(nullable: false)]
     private ?Utilisateur $utilisateur = null;
 
+    public function __toString(): string
+    {
+        return $this->rue . ', ' . $this->codePostal . ' ' . $this->ville;
+    }
+    
     public function getId(): ?int
     {
         return $this->id;

@@ -47,6 +47,11 @@ class Commande
         $this->lignes = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->numero ?? '';
+    }
+    
     public function getId(): ?int
     {
         return $this->id;

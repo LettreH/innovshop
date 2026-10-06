@@ -59,6 +59,11 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
         $this->commandes = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->prenom . ' ' . $this->nom;
+    }
+    
     public function getId(): ?int
     {
         return $this->id;
