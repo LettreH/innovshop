@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vérification - InnovShop{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">Ma commande</h1>
+    {{ include('commande/_etapes.html.twig', {etape: 1}) }}
+
+    <h2 class="h4 mb-3">Vérifiez vos articles</h2>
+    {{ include('commande/_recapitulatif.html.twig') }}
+
+    <div class="d-flex justify-content-between">
+        <a href="{{ path('app_panier') }}" class="btn btn-outline-secondary">← Modifier mon panier</a>
+        <a href="{{ path('app_commande_livraison') }}" class="btn btn-primary">Continuer vers la livraison →</a>
+    </div>
+{% endblock %}

@@ -3,9 +3,7 @@
 {% block title %}{{ produit.nom }} - InnovShop{% endblock %}
 
 {% block body %}
-
-    {# Le fil d'Ariane : ou suis-je ? #}
-    <nav aria-label="Fil d'Ariane" class="mb-4">
+    <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ path('app_home') }}">Accueil</a></li>
             <li class="breadcrumb-item"><a href="{{ path('app_catalogue') }}">Catalogue</a></li>
@@ -13,41 +11,41 @@
         </ol>
     </nav>
 
-    <div class="row g-5">
-
-        {# Colonne gauche : l'image #}
+    <div class="row g-4">
         <div class="col-12 col-md-6">
             {% if produit.image %}
                 <img src="{{ asset('uploads/produits/' ~ produit.image) }}"
-                     class="img-fluid rounded shadow" alt="{{ produit.nom }}">
+                     alt="{{ produit.nom }}" class="img-fluid rounded shadow-sm">
             {% endif %}
         </div>
 
-        {# Colonne droite : les informations #}
         <div class="col-12 col-md-6">
-            <span class="badge bg-secondary mb-2">{{ produit.categorie.nom }}</span>
+            <span class="badge bg-secondary">{{ produit.categorie.nom }}</span>
             {% if produit.alaUne %}
-                <span class="badge bg-warning text-dark mb-2">⭐ À la une</span>
+                <span class="badge bg-warning text-dark">⭐ À la une</span>
             {% endif %}
 
-            <h1>{{ produit.nom }}</h1>
+            <h1 class="mt-2">{{ produit.nom }}</h1>
             <p class="fs-3 fw-bold text-primary">{{ produit.prix|number_format(2, ',', ' ') }} €</p>
             <p class="lead">{{ produit.description }}</p>
 
-            {# Les options, rangees par nom #}
-            {% for nomOption, valeurs in produit.optionsGroupees %}
-                <label for="option-{{ loop.index }}" class="form-label fw-semibold">{{ nomOption }}</label>
-                <select id="option-{{ loop.index }}" class="form-select mb-3">
-                    {% for valeur in valeurs %}
-                        <option>{{ valeur }}</option>
-                    {% endfor %}
-                </select>
-            {% endfor %}
+            {# Formulaire d'ajout au panier #}
+            <form method="post" action="{{ path('app_panier_ajouter', {id: produit.id}) }}" data-turbo="false" class="js-panier">                {% for nom, valeurs in produit.optionsGroupees %}
+                    <div class="mb-3">
+                        <label for="option-{{ loop.index }}" class="form-label fw-semibold">{{ nom }}</label>
+                        <select id="option-{{ loop.index }}" name="options[{{ nom }}]" class="form-select">
+                            {% for valeur in valeurs %}
+                                <option value="{{ valeur }}">{{ valeur }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                {% endfor %}
 
-            <button class="btn btn-primary btn-lg w-100" disabled>Ajouter au panier (bientôt)</button>
+                <input type="hidden" name="_token" value="{{ csrf_token('panier') }}">
+                <button type="submit" class="btn btn-success btn-lg">🛒 Ajouter au panier</button>
+            </form>
 
-            <a href="{{ path('app_catalogue') }}" class="btn btn-link mt-3">← Retour au catalogue</a>
+            <a href="{{ path('app_catalogue') }}" class="btn btn-link mt-3 px-0">← Retour au catalogue</a>
         </div>
-
     </div>
 {% endblock %}

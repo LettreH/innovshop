@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Confirmation - InnovShop{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">Ma commande</h1>
+    {{ include('commande/_etapes.html.twig', {etape: 3}) }}
+
+    <div class="row g-4">
+        <div class="col-12 col-lg-8">
+            <h2 class="h4 mb-3">Récapitulatif</h2>
+            {{ include('commande/_recapitulatif.html.twig') }}
+        </div>
+
+        <div class="col-12 col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="h5">📦 Livraison à</h2>
+                    <p>
+                        {{ app.user.prenom }} {{ app.user.nom }}<br>
+                        {{ adresse.rue }}<br>
+                        {{ adresse.codePostal }} {{ adresse.ville }}<br>
+                        {{ adresse.pays }}
+                    </p>
+
+                    <form method="post" action="{{ path('app_commande_valider', {id: adresse.id}) }}" data-turbo="false">
+                        <input type="hidden" name="_token" value="{{ csrf_token('valider-commande') }}">
+                        <button type="submit" class="btn btn-success btn-lg w-100">✅ Je confirme ma commande</button>
+                    </form>
+                </div>
+            </div>
+            <a href="{{ path('app_commande_livraison') }}" class="btn btn-link px-0 mt-3">← Changer d'adresse</a>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon panier - InnovShop{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">🛒 Mon panier</h1>
+
+    {% if lignes is empty %}
+        <div class="alert alert-info">
+            Votre panier est vide.
+            <a href="{{ path('app_catalogue') }}" class="alert-link">Découvrir le catalogue</a>
+        </div>
+    {% else %}
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Option</th>
+                        <th class="text-end">Prix</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ligne in lignes %}
+                        <tr>
+                            <td>
+                                <a href="{{ path('app_produit_show', {id: ligne.produit.id}) }}">
+                                    {{ ligne.produit.nom }}
+                                </a>
+                            </td>
+                            <td>{{ ligne.option ?? '—' }}</td>
+                            <td class="text-end">{{ ligne.produit.prix|number_format(2, ',', ' ') }} €</td>
+                            <td class="text-end">
+                                <form method="post" action="{{ path('app_panier_supprimer', {cle: ligne.cle}) }}" data-turbo="false" class="js-panier">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('panier') }}">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Retirer</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr class="fw-bold fs-5">
+                        <td colspan="2">Total</td>
+                        <td class="text-end" id="total-panier">{{ total|number_format(2, ',', ' ') }} €</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <a href="{{ path('app_catalogue') }}" class="btn btn-outline-secondary">← Continuer mes achats</a>
+            <a href="{{ path('app_commande_verification') }}" class="btn btn-primary">Passer commande →</a>
+        </div>
+    {% endif %}
+{% endblock %}

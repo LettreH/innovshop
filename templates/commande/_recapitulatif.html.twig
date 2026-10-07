@@ -1,0 +1,26 @@
+<div class="table-responsive">
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Produit</th>
+                <th>Option</th>
+                <th class="text-end">Prix</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ligne in lignes %}
+                <tr>
+                    <td>{{ ligne.produit.nom }}</td>
+                    <td>{{ ligne.option ?? '—' }}</td>
+                    <td class="text-end">{{ ligne.produit.prix|number_format(2, ',', ' ') }} €</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr class="fw-bold fs-5">
+                <td colspan="2">Total</td>
+                <td class="text-end">{{ total|number_format(2, ',', ' ') }} €</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

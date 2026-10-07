@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Merci ! - InnovShop{% endblock %}
+
+{% block body %}
+    <div class="text-center py-5">
+        <h1 class="display-5">🎉 Merci pour votre commande !</h1>
+        <p class="lead">
+            Votre commande <strong>{{ commande.numero }}</strong>
+            d'un montant de <strong>{{ commande.montantTotal|number_format(2, ',', ' ') }} €</strong>
+            a bien été enregistrée.
+        </p>
+        <p>Vous allez recevoir un email récapitulatif à <strong>{{ app.user.email }}</strong>.</p>
+        <a href="{{ path('app_home') }}" class="btn btn-primary">Retour à l'accueil</a>
+    </div>
+{% endblock %}

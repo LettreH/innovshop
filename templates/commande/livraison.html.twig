@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Livraison - InnovShop{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">Ma commande</h1>
+    {{ include('commande/_etapes.html.twig', {etape: 2}) }}
+
+    {% if adresses is not empty %}
+        <h2 class="h4 mb-3">Mes adresses enregistrées</h2>
+        <div class="row g-3 mb-4">
+            {% for adresse in adresses %}
+                <div class="col-12 col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <p class="mb-3">
+                                {{ adresse.rue }}<br>
+                                {{ adresse.codePostal }} {{ adresse.ville }}<br>
+                                {{ adresse.pays }}
+                            </p>
+                            <a href="{{ path('app_commande_confirmation', {id: adresse.id}) }}" class="btn btn-outline-primary">
+                                Livrer à cette adresse
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <h2 class="h4 mb-3">Ou une nouvelle adresse</h2>
+    {% else %}
+        <h2 class="h4 mb-3">Adresse de livraison</h2>
+    {% endif %}
+
+    <div class="card">
+        <div class="card-body">
+            {{ form_start(form, {attr: {novalidate: 'novalidate', 'data-turbo': 'false'}}) }}
+                {{ form_row(form.rue) }}
+                <div class="row">
+                    <div class="col-12 col-md-4">{{ form_row(form.codePostal) }}</div>
+                    <div class="col-12 col-md-8">{{ form_row(form.ville) }}</div>
+                </div>
+                {{ form_row(form.pays) }}
+                <button type="submit" class="btn btn-primary">Utiliser cette adresse →</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+    <a href="{{ path('app_commande_verification') }}" class="btn btn-link px-0 mt-3">← Retour à l'étape 1</a>
+{% endblock %}

@@ -1,0 +1,9 @@
+<ul class="nav nav-pills nav-fill mb-4 gap-2">
+    {% for numero, nom in {1: 'Vérification', 2: 'Livraison', 3: 'Confirmation'} %}
+        <li class="nav-item">
+            <span class="nav-link {{ numero == etape ? 'active' : (numero < etape ? 'text-success' : 'text-muted') }}">
+                {% if numero < etape %}✔{% else %}{{ numero }}.{% endif %} {{ nom }}
+            </span>
+        </li>
+    {% endfor %}
+</ul>

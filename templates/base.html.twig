@@ -33,6 +33,12 @@
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item"><a class="nav-link" href="{{ path('app_home') }}">Accueil</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ path('app_catalogue') }}">Catalogue</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_panier') }}">
+                               🛒 Panier
+                              <span id="compteur-panier" class="badge bg-warning text-dark">{{ panier.nombre }}</span>
+                            </a>
+                        </li>
                     </ul>
 
                     <ul class="navbar-nav align-items-lg-center">

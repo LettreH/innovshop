@@ -64,12 +64,14 @@ class CommandeCrudController extends AbstractCrudController
         yield ChoiceField::new('statut', 'Statut')
             ->setChoices([
                 'En attente' => 'en_attente',
+                'Validée' => 'validee',
                 'Expediee'   => 'expediee',
                 'Livree'     => 'livree',
                 'Annulee'    => 'annulee',
             ])
             ->renderAsBadges([
                 'en_attente' => 'warning',
+                'validee' => 'primary',
                 'expediee'   => 'info',
                 'livree'     => 'success',
                 'annulee'    => 'danger',
