@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catalogue - InnovShop{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">Notre catalogue</h1>
+
+    {# ===== Formulaire de recherche et de filtre ===== #}
+        <form method="get" action="{{ path('app_catalogue') }}" class="row g-2 mb-4" data-turbo="false">        <div class="col-12 col-md-6">
+            <input type="search" name="q" value="{{ motCle }}"
+                   class="form-control" placeholder="Rechercher un produit...">
+        </div>
+        <div class="col-12 col-md-4">
+            <select name="categorie" class="form-select">
+                <option value="">Toutes les catégories</option>
+                {% for categorie in categories %}
+                    <option value="{{ categorie.id }}"
+                        {{ categorie.id == categorieActive ? 'selected' }}>
+                        {{ categorie.nom }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-12 col-md-2 d-grid">
+            <button type="submit" class="btn btn-primary">Rechercher</button>
+        </div>
+    </form>
+
+    {# ===== Nombre de résultats et bouton pour tout effacer ===== #}
+    <p class="text-muted">
+        {{ produits|length }} produit(s) trouvé(s)
+        {% if motCle or categorieActive %}
+            · <a href="{{ path('app_catalogue') }}">Effacer les filtres</a>
+        {% endif %}
+    </p>
+
+    {# ===== Grille des produits ===== #}
+    <div class="row g-4">
+        {% for produit in produits %}
+            <div class="col-12 col-sm-6 col-lg-4">
+                {{ include('produit/_carte.html.twig') }}
+            </div>
+        {% else %}
+            <p class="text-muted">Aucun produit ne correspond à votre recherche.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

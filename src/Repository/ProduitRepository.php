@@ -16,6 +16,54 @@ class ProduitRepository extends ServiceEntityRepository
         parent::__construct($registry, Produit::class);
     }
 
+        /**
+     * Les X derniers produits ajoutés (les plus récents d'abord).
+     */
+    public function findDerniers(int $nombre = 3): array
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.dateAjout', 'DESC')
+            ->setMaxResults($nombre)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Les X produits marqués "à la une" par l'admin.
+     */
+    public function findALaUne(int $nombre = 3): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.alaUne = :aLaUne')
+            ->setParameter('aLaUne', true)
+            ->orderBy('p.dateAjout', 'DESC')
+            ->setMaxResults($nombre)
+            ->getQuery()
+            ->getResult();
+    }
+
+        /**
+     * Recherche des produits par mot-clé et/ou par catégorie.
+     * Les deux filtres sont facultatifs.
+     */
+    public function rechercher(?string $motCle, ?int $categorieId): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->orderBy('p.dateAjout', 'DESC');
+
+        if ($motCle) {
+            $qb->andWhere('p.nom LIKE :motCle OR p.description LIKE :motCle')
+               ->setParameter('motCle', '%' . $motCle . '%');
+        }
+
+        if ($categorieId) {
+            $qb->andWhere('p.categorie = :categorie')
+               ->setParameter('categorie', $categorieId);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return Produit[] Returns an array of Produit objects
 //     */

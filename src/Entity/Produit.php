@@ -62,6 +62,21 @@ class Produit
     {
         return $this->nom ?? '';
     }
+    
+        /**
+     * Range les options par nom.
+     * Exemple : ['Taille' => ['S', 'M', 'L'], 'Couleur' => ['Gris', 'Noir']]
+     */
+    public function getOptionsGroupees(): array
+    {
+        $groupes = [];
+
+        foreach ($this->options as $option) {
+            $groupes[$option->getNom()][] = $option->getValeur();
+        }
+
+        return $groupes;
+    }
 
     public function getId(): ?int
     {

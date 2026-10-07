@@ -1,20 +1,44 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}InnovShop - Le futur, livré chez vous{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    {# ===== 1. Bandeau de bienvenue ===== #}
+    <section class="p-5 mb-5 bg-dark text-white rounded-3 text-center">
+        <h1 class="display-5 fw-bold">🚀 Bienvenue chez InnovShop</h1>
+        <p class="lead">Les objets du futur, disponibles dès aujourd'hui.</p>
+        <a href="{{ path('app_catalogue') }}" class="btn btn-primary btn-lg">
+            Découvrir le catalogue
+        </a>
+    </section>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/home/hermann/innovshop/src/Controller/HomeController.php</code></li>
-        <li>Your template at <code>/home/hermann/innovshop/templates/home/index.html.twig</code></li>
-    </ul>
-</div>
+    {# ===== 2. Produits à la une ===== #}
+    <section class="mb-5">
+        <h2 class="mb-4">⭐ À la une</h2>
+        <div class="row g-4">
+            {% for produit in produitsALaUne %}
+                <div class="col-12 col-sm-6 col-lg-4">
+                    {{ include('produit/_carte.html.twig') }}
+                </div>
+            {% else %}
+                <p class="text-muted">Aucun produit à la une pour le moment.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    {# ===== 3. Nouveautés ===== #}
+    <section class="mb-5">
+        <h2 class="mb-4">🆕 Nouveautés</h2>
+        <div class="row g-4">
+            {% for produit in nouveautes %}
+                <div class="col-12 col-sm-6 col-lg-4">
+                    {{ include('produit/_carte.html.twig') }}
+                </div>
+            {% else %}
+                <p class="text-muted">Aucune nouveauté pour le moment.</p>
+            {% endfor %}
+        </div>
+    </section>
+
 {% endblock %}
