@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande {{ commande.numero }} - InnovShop{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">Commande {{ commande.numero }}</h1>
+
+    <div class="row g-4">
+        <div class="col-12 col-md-3">
+            {{ include('compte/_menu.html.twig', {actif: 'commandes'}) }}
+        </div>
+
+        <div class="col-12 col-md-9">
+            <p>
+                Passée le {{ commande.dateCommande|date('d/m/Y à H:i') }}
+                · {{ include('compte/_statut.html.twig', {statut: commande.statut}) }}
+            </p>
+
+            {{ include('compte/_suivi.html.twig', {statut: commande.statut}) }}
+
+            <h2 class="h5 mt-4">Articles</h2>
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Produit</th>
+                            <th>Option</th>
+                            <th class="text-end">Prix unitaire</th>
+                            <th class="text-center">Qté</th>
+                            <th class="text-end">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ligne in commande.lignesGroupees %}
+                            <tr>
+                                <td>{{ ligne.nom }}</td>
+                                <td>{{ ligne.option ?? '—' }}</td>
+                                <td class="text-end">{{ ligne.prix|number_format(2, ',', ' ') }} €</td>
+                                <td class="text-center">{{ ligne.quantite }}</td>
+                                <td class="text-end">{{ (ligne.prix * ligne.quantite)|number_format(2, ',', ' ') }} €</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr class="fw-bold fs-5">
+                            <td colspan="4">Total de la commande</td>
+                            <td class="text-end">{{ commande.montantTotal|number_format(2, ',', ' ') }} €</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h2 class="h5">📦 Livraison à</h2>
+                    <p class="mb-0">
+                        {{ commande.utilisateur.prenom }} {{ commande.utilisateur.nom }}<br>
+                        {{ commande.adresse.rue }}<br>
+                        {{ commande.adresse.codePostal }} {{ commande.adresse.ville }}<br>
+                        {{ commande.adresse.pays }}
+                    </p>
+                </div>
+            </div>
+            {% if commande.statut != 'annulee' %}
+                <a href="{{ path('app_compte_facture', {numero: commande.numero}) }}"
+                   class="btn btn-outline-dark mb-3" data-turbo="false">
+                    📄 Télécharger la facture (PDF)
+                </a>
+                <br>
+            {% endif %}
+            
+            <a href="{{ path('app_compte_commandes') }}" class="btn btn-link px-0">← Retour à mes commandes</a>
+        </div>
+    </div>
+{% endblock %}

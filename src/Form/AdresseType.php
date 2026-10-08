@@ -19,6 +19,7 @@ class AdresseType extends AbstractType
         $builder
             ->add('rue', TextType::class, [
                 'label' => 'Numéro et rue',
+                'empty_data' => '',
                 'constraints' => [
                     new Assert\NotBlank(message: 'Indiquez votre numéro et votre rue.'),
                     new Assert\Length(max: 255),
@@ -26,6 +27,7 @@ class AdresseType extends AbstractType
             ])
             ->add('codePostal', TextType::class, [
                 'label' => 'Code postal',
+                'empty_data' => '',
                 'constraints' => [
                     new Assert\NotBlank(message: 'Indiquez votre code postal.'),
                     new Assert\Regex(
@@ -36,6 +38,7 @@ class AdresseType extends AbstractType
             ])
             ->add('ville', TextType::class, [
                 'label' => 'Ville',
+                'empty_data' => '',
                 'constraints' => [
                     new Assert\NotBlank(message: 'Indiquez votre ville.'),
                     new Assert\Length(max: 100),
@@ -43,6 +46,7 @@ class AdresseType extends AbstractType
             ])
             ->add('pays', TextType::class, [
                 'label' => 'Pays',
+                'empty_data' => '',
                 'constraints' => [
                     new Assert\NotBlank(message: 'Indiquez votre pays.'),
                     new Assert\Length(max: 100),

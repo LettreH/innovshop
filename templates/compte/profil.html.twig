@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon profil - InnovShop{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">Mon profil</h1>
+
+    <div class="row g-4">
+        <div class="col-12 col-md-3">
+            {{ include('compte/_menu.html.twig', {actif: 'profil'}) }}
+        </div>
+
+        <div class="col-12 col-md-9">
+            <div class="card">
+                <div class="card-body">
+                    <p class="text-muted">
+                        Adresse email (identifiant) : <strong>{{ app.user.email }}</strong>
+                    </p>
+
+                    {{ form_start(form, {attr: {novalidate: 'novalidate', 'data-turbo': 'false'}}) }}
+                        <div class="row">
+                            <div class="col-12 col-md-6">{{ form_row(form.prenom) }}</div>
+                            <div class="col-12 col-md-6">{{ form_row(form.nom) }}</div>
+                        </div>
+                        {{ form_row(form.telephone) }}
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

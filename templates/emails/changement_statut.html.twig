@@ -1,0 +1,42 @@
+{% set libelles = {
+    en_attente: '🕒 En attente',
+    validee:    '✅ Validée',
+    expediee:   '🚚 Expédiée',
+    livree:     '📦 Livrée',
+    annulee:    '❌ Annulée',
+} %}
+{% set messages = {
+    en_attente: 'Votre commande est en attente de traitement.',
+    validee:    'Bonne nouvelle : votre commande a été validée et est en cours de préparation.',
+    expediee:   'Votre colis est en route ! Il arrivera très bientôt chez vous.',
+    livree:     'Votre commande a été livrée. Nous espérons qu\'elle vous plaît !',
+    annulee:    'Votre commande a été annulée. Contactez-nous pour toute question.',
+} %}
+
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; color: #222;">
+
+    <h1 style="background: #212529; color: #fff; padding: 20px; margin: 0;">
+        🚀 InnovShop
+    </h1>
+
+    <div style="padding: 20px; border: 1px solid #ddd;">
+        <p>Bonjour {{ commande.utilisateur.prenom }},</p>
+
+        <p>Le statut de votre commande <strong>{{ commande.numero }}</strong> a changé :</p>
+
+        <p style="font-size: 20px; text-align: center; background: #f1f1f1; padding: 15px;">
+            <strong>{{ libelles[commande.statut] ?? commande.statut }}</strong>
+        </p>
+
+        <p>{{ messages[commande.statut] ?? '' }}</p>
+
+        <p style="text-align: center; margin: 25px 0;">
+            <a href="{{ url('app_compte_commande', {numero: commande.numero}) }}"
+               style="background: #0d6efd; color: #fff; padding: 12px 20px; text-decoration: none; border-radius: 5px;">
+                Suivre ma commande
+            </a>
+        </p>
+
+        <p>À bientôt dans le futur,<br>L'équipe InnovShop</p>
+    </div>
+</div>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Facture {{ commande.numero }}</title>
+    <style>
+        body { font-family: 'DejaVu Sans', sans-serif; font-size: 12px; color: #222; }
+        h1 { font-size: 22px; margin: 0; }
+        .entete { width: 100%; margin-bottom: 30px; }
+        .entete td { vertical-align: top; }
+        .droite { text-align: right; }
+        .bloc { border: 1px solid #ccc; padding: 10px; }
+        table.articles { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        table.articles th { background: #212529; color: #fff; padding: 8px; text-align: left; }
+        table.articles td { padding: 8px; border-bottom: 1px solid #ddd; }
+        table.totaux { width: 40%; margin-left: 60%; margin-top: 15px; border-collapse: collapse; }
+        table.totaux td { padding: 5px 8px; }
+        .total-ttc { font-size: 15px; font-weight: bold; border-top: 2px solid #222; }
+        .pied { margin-top: 40px; font-size: 10px; color: #777; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <table class="entete">
+        <tr>
+            <td>
+                <h1>InnovShop</h1>
+                Le futur, livré chez vous<br>
+                1 avenue de l'Innovation<br>
+                68100 Mulhouse - France<br>
+                contact@innovshop.fr
+            </td>
+            <td class="droite">
+                <h1>FACTURE</h1>
+                N° {{ commande.numero }}<br>
+                Date : {{ commande.dateCommande|date('d/m/Y') }}
+            </td>
+        </tr>
+    </table>
+
+    <div class="bloc">
+        <strong>Facturé et livré à :</strong><br>
+        {{ commande.utilisateur.prenom }} {{ commande.utilisateur.nom }}<br>
+        {{ commande.adresse.rue }}<br>
+        {{ commande.adresse.codePostal }} {{ commande.adresse.ville }}<br>
+        {{ commande.adresse.pays }}<br>
+        {{ commande.utilisateur.email }}
+    </div>
+
+    <table class="articles">
+        <thead>
+            <tr>
+                <th>Produit</th>
+                <th>Option</th>
+                <th class="droite">Prix unitaire TTC</th>
+                <th class="droite">Qté</th>
+                <th class="droite">Total TTC</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ligne in commande.lignesGroupees %}
+                <tr>
+                    <td>{{ ligne.nom }}</td>
+                    <td>{{ ligne.option ?? '-' }}</td>
+                    <td class="droite">{{ ligne.prix|number_format(2, ',', ' ') }} €</td>
+                    <td class="droite">{{ ligne.quantite }}</td>
+                    <td class="droite">{{ (ligne.prix * ligne.quantite)|number_format(2, ',', ' ') }} €</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% set ttc = commande.montantTotal %}
+    {% set ht = ttc / 1.2 %}
+    <table class="totaux">
+        <tr>
+            <td>Total HT</td>
+            <td class="droite">{{ ht|number_format(2, ',', ' ') }} €</td>
+        </tr>
+        <tr>
+            <td>TVA (20 %)</td>
+            <td class="droite">{{ (ttc - ht)|number_format(2, ',', ' ') }} €</td>
+        </tr>
+        <tr class="total-ttc">
+            <td>Total TTC</td>
+            <td class="droite">{{ ttc|number_format(2, ',', ' ') }} €</td>
+        </tr>
+    </table>
+
+    <p class="pied">
+        InnovShop - Boutique fictive réalisée dans le cadre d'une formation.<br>
+        Merci pour votre confiance !
+    </p>
+
+</body>
+</html>

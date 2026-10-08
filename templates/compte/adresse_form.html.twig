@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ titre }} - InnovShop{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">{{ titre }}</h1>
+
+    <div class="row g-4">
+        <div class="col-12 col-md-3">
+            {{ include('compte/_menu.html.twig', {actif: 'adresses'}) }}
+        </div>
+
+        <div class="col-12 col-md-9">
+            <div class="card">
+                <div class="card-body">
+                    {{ form_start(form, {attr: {novalidate: 'novalidate', 'data-turbo': 'false'}}) }}
+                        {{ form_row(form.rue) }}
+                        <div class="row">
+                            <div class="col-12 col-md-4">{{ form_row(form.codePostal) }}</div>
+                            <div class="col-12 col-md-8">{{ form_row(form.ville) }}</div>
+                        </div>
+                        {{ form_row(form.pays) }}
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        <a href="{{ path('app_compte_adresses') }}" class="btn btn-link">Annuler</a>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

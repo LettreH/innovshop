@@ -1,0 +1,22 @@
+<div class="list-group mb-4">
+    <a href="{{ path('app_compte') }}"
+       class="list-group-item list-group-item-action {{ actif == 'accueil' ? 'active' }}">
+        🏠 Tableau de bord
+    </a>
+    <a href="{{ path('app_compte_commandes') }}"
+       class="list-group-item list-group-item-action {{ actif == 'commandes' ? 'active' }}">
+        📦 Mes commandes
+    </a>
+    <a href="{{ path('app_compte_profil') }}"
+       class="list-group-item list-group-item-action {{ actif == 'profil' ? 'active' }}">
+        👤 Mon profil
+    </a>
+    <a href="{{ path('app_compte_adresses') }}"
+       class="list-group-item list-group-item-action {{ actif == 'adresses' ? 'active' }}">
+        📍 Mes adresses
+    </a>
+    <a href="{{ path('app_compte_mot_de_passe') }}"
+       class="list-group-item list-group-item-action {{ actif == 'mot_de_passe' ? 'active' }}">
+        🔑 Mot de passe
+    </a>
+</div>

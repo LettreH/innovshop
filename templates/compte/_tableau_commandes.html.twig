@@ -1,0 +1,28 @@
+<div class="table-responsive">
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Numéro</th>
+                <th>Date</th>
+                <th class="text-end">Montant</th>
+                <th>Statut</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for commande in commandes %}
+                <tr>
+                    <td class="fw-semibold">{{ commande.numero }}</td>
+                    <td>{{ commande.dateCommande|date('d/m/Y') }}</td>
+                    <td class="text-end">{{ commande.montantTotal|number_format(2, ',', ' ') }} €</td>
+                    <td>{{ include('compte/_statut.html.twig', {statut: commande.statut}) }}</td>
+                    <td class="text-end">
+                        <a href="{{ path('app_compte_commande', {numero: commande.numero}) }}" class="btn btn-sm btn-outline-primary">
+                            Détails
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

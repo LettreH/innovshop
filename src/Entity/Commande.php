@@ -51,7 +51,7 @@ class Commande
     {
         return $this->numero ?? '';
     }
-    
+
     public function getId(): ?int
     {
         return $this->id;
@@ -157,5 +157,31 @@ class Commande
         }
 
         return $this;
+    }
+
+    /**
+     * Regroupe les lignes identiques (même produit, même option, même prix)
+     * pour afficher une quantité. Ex : 2 lignes "Veste - Taille M" => quantité 2.
+     */
+    public function getLignesGroupees(): array
+    {
+        $groupes = [];
+
+        foreach ($this->lignes as $ligne) {
+            $cle = $ligne->getNomProduit() . '|' . $ligne->getOptionChoisie() . '|' . $ligne->getPrixUnitaire();
+
+            if (!isset($groupes[$cle])) {
+                $groupes[$cle] = [
+                    'nom'      => $ligne->getNomProduit(),
+                    'option'   => $ligne->getOptionChoisie(),
+                    'prix'     => (float) $ligne->getPrixUnitaire(),
+                    'quantite' => 0,
+                ];
+            }
+
+            $groupes[$cle]['quantite']++;
+        }
+
+        return array_values($groupes);
     }
 }

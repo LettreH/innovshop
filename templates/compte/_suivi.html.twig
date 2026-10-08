@@ -1,0 +1,16 @@
+{% if statut == 'annulee' %}
+    <div class="alert alert-danger">❌ Cette commande a été annulée.</div>
+{% else %}
+    {% set rangs = {en_attente: 1, validee: 2, expediee: 3, livree: 4} %}
+    {% set position = rangs[statut] ?? 0 %}
+
+    <div class="row g-2 text-center my-3">
+        {% for cle, libelle in {en_attente: '🕒 En attente', validee: '✅ Validée', expediee: '🚚 Expédiée', livree: '📦 Livrée'} %}
+            <div class="col-3">
+                <div class="p-2 rounded small {{ rangs[cle] <= position ? 'bg-success text-white' : 'bg-light text-muted' }} {{ cle == statut ? 'fw-bold' }}">
+                    {{ libelle }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}

@@ -1,0 +1,9 @@
+{% set statuts = {
+    en_attente: ['🕒 En attente', 'warning text-dark'],
+    validee:    ['✅ Validée',    'primary'],
+    expediee:   ['🚚 Expédiée',   'info text-dark'],
+    livree:     ['📦 Livrée',     'success'],
+    annulee:    ['❌ Annulée',    'danger'],
+} %}
+{% set s = statuts[statut] ?? [statut, 'secondary'] %}
+<span class="badge bg-{{ s[1] }}">{{ s[0] }}</span>

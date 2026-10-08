@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes commandes - InnovShop{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">Mes commandes</h1>
+
+    <div class="row g-4">
+        <div class="col-12 col-md-3">
+            {{ include('compte/_menu.html.twig', {actif: 'commandes'}) }}
+        </div>
+
+        <div class="col-12 col-md-9">
+            {% if commandes is empty %}
+                <div class="alert alert-info">Vous n'avez pas encore passé de commande.</div>
+            {% else %}
+                {{ include('compte/_tableau_commandes.html.twig') }}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
