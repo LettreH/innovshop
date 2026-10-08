@@ -231,7 +231,8 @@ php bin/console cache:clear
 
 ## 📁 Livrables du projet
 
-- 📋 Backlog (user stories) et tableau **Kanban Trello**
+- 📋 Backlog (user stories) : [`docs/backlog_innovshop.xlsx`](docs/backlog_innovshop.xlsx)
+- 🗂️ Tableau Kanban Trello (public) : [voir le tableau](https://trello.com/b/CTkdf2jz/innovshop)
 - 🧩 Diagramme de classes : [`docs/diagramme_classe_innovshop.svg`](docs/diagramme_classe_innovshop.svg)
 - 💻 Code source : ce dépôt
 - 🌍 Site en ligne : https://hermann.alwaysdata.net/innovshop/
