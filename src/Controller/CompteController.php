@@ -3,15 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\Commande;
-use App\Repository\CommandeRepository;
-use App\Service\FactureService;
-use App\Form\ProfilType;
 use App\Form\ChangerMotDePasseType;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use App\Form\ProfilType;
+use App\Repository\CommandeRepository;
+use App\Security\Voter\CommandeVoter;
+use App\Service\FactureService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -37,27 +39,27 @@ final class CompteController extends AbstractController
         ]);
     }
 
-    // Détail d'une commande
+    // Détail d'une commande (le Voter vérifie que c'est bien la sienne)
     #[Route('/commande/{numero}', name: 'app_compte_commande')]
-    public function commande(string $numero, CommandeRepository $commandeRepository): Response
-    {
+    #[IsGranted(CommandeVoter::VOIR, subject: 'commande')]
+    public function commande(
+        #[MapEntity(mapping: ['numero' => 'numero'])] Commande $commande
+    ): Response {
         return $this->render('compte/commande.html.twig', [
-            'commande' => $this->trouverCommande($numero, $commandeRepository),
+            'commande' => $commande,
         ]);
     }
 
-    // Téléchargement de la facture PDF
+    // Téléchargement de la facture PDF (même règle que le détail)
     #[Route('/commande/{numero}/facture', name: 'app_compte_facture')]
+    #[IsGranted(CommandeVoter::VOIR, subject: 'commande')]
     public function facture(
-        string $numero,
-        CommandeRepository $commandeRepository,
+        #[MapEntity(mapping: ['numero' => 'numero'])] Commande $commande,
         FactureService $factureService
     ): Response {
-        $commande = $this->trouverCommande($numero, $commandeRepository);
-
         if ($commande->getStatut() === 'annulee') {
             $this->addFlash('warning', 'Aucune facture pour une commande annulée.');
-            return $this->redirectToRoute('app_compte_commande', ['numero' => $numero]);
+            return $this->redirectToRoute('app_compte_commande', ['numero' => $commande->getNumero()]);
         }
 
         $pdf = $factureService->genererPdf($commande);
@@ -68,7 +70,7 @@ final class CompteController extends AbstractController
         ]);
     }
 
-        // Modifier son profil (prénom, nom, téléphone)
+    // Modifier son profil (prénom, nom, téléphone)
     #[Route('/profil', name: 'app_compte_profil')]
     public function profil(Request $request, EntityManagerInterface $em): Response
     {
@@ -87,7 +89,7 @@ final class CompteController extends AbstractController
         ]);
     }
 
-        // Changer son mot de passe
+    // Changer son mot de passe
     #[Route('/mot-de-passe', name: 'app_compte_mot_de_passe')]
     public function motDePasse(
         Request $request,
@@ -113,6 +115,7 @@ final class CompteController extends AbstractController
             'form' => $form,
         ]);
     }
+
     /**
      * Les commandes du client connecté, de la plus récente à la plus ancienne.
      */
@@ -122,22 +125,5 @@ final class CompteController extends AbstractController
             ['utilisateur' => $this->getUser()],
             ['dateCommande' => 'DESC']
         );
-    }
-
-    /**
-     * Trouve une commande du client connecté, sinon erreur 404.
-     */
-    private function trouverCommande(string $numero, CommandeRepository $commandeRepository): Commande
-    {
-        $commande = $commandeRepository->findOneBy([
-            'numero'      => $numero,
-            'utilisateur' => $this->getUser(),
-        ]);
-
-        if (!$commande) {
-            throw $this->createNotFoundException('Commande introuvable.');
-        }
-
-        return $commande;
     }
 }

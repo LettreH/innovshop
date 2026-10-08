@@ -66,7 +66,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->prenom . ' ' . $this->nom;
     }
-    
+
     public function getId(): ?int
     {
         return $this->id;
@@ -138,7 +138,7 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $data = (array) $this;
         $data["\0" . self::class . "\0password"] = hash('crc32c', $this->password);
-        
+
         return $data;
     }
 

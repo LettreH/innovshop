@@ -7,8 +7,6 @@ import './stimulus_bootstrap.js';
  */
 import './styles/app.css';
 
-console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
-
 // ================================================
 // PANIER EN AJAX : ajouter / retirer sans recharger
 // ================================================
@@ -23,19 +21,26 @@ document.addEventListener('submit', async (event) => {
     event.preventDefault(); // on empêche le rechargement de la page
 
     // 1. On envoie le formulaire au serveur, en cachette
-    const reponse = await fetch(form.action, {
-        method: 'POST',
-        body: new FormData(form),
-        headers: { 'X-Requested-With': 'XMLHttpRequest' },
-    });
+    let data;
+    try {
+        const reponse = await fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        });
 
-    if (!reponse.ok) {
-        alert('Une erreur est survenue, veuillez réessayer.');
+        if (!reponse.ok) {
+            throw new Error('Refusé par le serveur (code ' + reponse.status + ')');
+        }
+
+        // 2. On lit la réponse JSON du serveur
+        data = await reponse.json();
+    } catch (erreur) {
+        // Quoi qu'il arrive, on prévient l'utilisateur au lieu de rester muet
+        afficherMessage('Action refusée. Rechargez la page et réessayez.', 'danger');
+        console.error(erreur);
         return;
     }
-
-    // 2. On lit la réponse JSON du serveur
-    const data = await reponse.json();
 
     // 3. On met à jour le compteur du menu
     document.getElementById('compteur-panier').textContent = data.nombre;
@@ -50,14 +55,14 @@ document.addEventListener('submit', async (event) => {
         }
     }
 
-    // 5. Petit message vert qui disparaît après 3 secondes
-    afficherMessage(data.message);
+    // 5. Petit message vert qui disparaît après 4 secondes
+    afficherMessage(data.message, 'success');
 });
 
-function afficherMessage(texte) {
+function afficherMessage(texte, type = 'success') {
     const alerte = document.createElement('div');
-    alerte.className = 'alert alert-success';
+    alerte.className = 'alert alert-' + type;
     alerte.textContent = texte;
     document.querySelector('main').prepend(alerte);
-    setTimeout(() => alerte.remove(), 3000);
+    setTimeout(() => alerte.remove(), 4000);
 }

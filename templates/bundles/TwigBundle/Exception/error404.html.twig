@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page introuvable - InnovShop{% endblock %}
+
+{% block body %}
+    <div class="text-center py-5">
+        <p class="display-1">🛸</p>
+        <h1 class="display-5 fw-bold">Erreur 404</h1>
+        <p class="lead">Cette page s'est perdue dans le continuum espace-temps.</p>
+        <p class="text-muted">L'adresse est peut-être incorrecte, ou le produit n'existe plus.</p>
+        <a href="{{ path('app_home') }}" class="btn btn-primary">Retour à l'accueil</a>
+        <a href="{{ path('app_catalogue') }}" class="btn btn-outline-secondary">Voir le catalogue</a>
+    </div>
+{% endblock %}

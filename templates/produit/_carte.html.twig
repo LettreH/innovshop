@@ -1,7 +1,6 @@
 <div class="card h-100 shadow-sm">
     {% if produit.image %}
-        <img src="{{ asset('uploads/produits/' ~ produit.image) }}" class="card-img-top" alt="{{ produit.nom }}">
-    {% endif %}
+    <img src="{{ asset('uploads/produits/' ~ produit.image) }}" class="card-img-top" alt="{{ produit.nom }}" loading="lazy">    {% endif %}
 
     <div class="card-body d-flex flex-column">
         <span class="badge bg-secondary align-self-start mb-2">{{ produit.categorie.nom }}</span>

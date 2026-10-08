@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Adresse;
 use App\Form\AdresseType;
 use App\Repository\CommandeRepository;
+use App\Security\Voter\AdresseVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -64,16 +65,15 @@ final class AdresseController extends AbstractController
         ]);
     }
 
-    // Modifier une adresse
+    // Modifier une adresse (le Voter vérifie que c'est bien la sienne)
     #[Route('/{id}/modifier', name: 'app_compte_adresse_modifier', requirements: ['id' => '\d+'])]
+    #[IsGranted(AdresseVoter::GERER, subject: 'adresse')]
     public function modifier(
         Adresse $adresse,
         Request $request,
         EntityManagerInterface $em,
         CommandeRepository $commandeRepository
     ): Response {
-        $this->verifierProprietaire($adresse);
-
         if ($this->estUtilisee($adresse, $commandeRepository)) {
             $this->addFlash('warning', 'Cette adresse est liée à une commande : elle ne peut plus être modifiée. Ajoutez une nouvelle adresse.');
             return $this->redirectToRoute('app_compte_adresses');
@@ -95,16 +95,15 @@ final class AdresseController extends AbstractController
         ]);
     }
 
-    // Supprimer une adresse
+    // Supprimer une adresse (le Voter vérifie que c'est bien la sienne)
     #[Route('/{id}/supprimer', name: 'app_compte_adresse_supprimer', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[IsGranted(AdresseVoter::GERER, subject: 'adresse')]
     public function supprimer(
         Adresse $adresse,
         Request $request,
         EntityManagerInterface $em,
         CommandeRepository $commandeRepository
     ): Response {
-        $this->verifierProprietaire($adresse);
-
         if (!$this->isCsrfTokenValid('supprimer-adresse-' . $adresse->getId(), $request->request->get('_token'))) {
             throw $this->createAccessDeniedException('Jeton de sécurité invalide.');
         }
@@ -119,16 +118,6 @@ final class AdresseController extends AbstractController
 
         $this->addFlash('success', 'Adresse supprimée.');
         return $this->redirectToRoute('app_compte_adresses');
-    }
-
-    /**
-     * Sécurité : l'adresse doit appartenir au client connecté.
-     */
-    private function verifierProprietaire(Adresse $adresse): void
-    {
-        if ($adresse->getUtilisateur()?->getId() !== $this->getUser()->getId()) {
-            throw $this->createAccessDeniedException('Cette adresse ne vous appartient pas.');
-        }
     }
 
     /**

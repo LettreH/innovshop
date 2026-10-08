@@ -7,6 +7,7 @@ use App\Service\PanierService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/panier')]
@@ -27,7 +28,7 @@ final class PanierController extends AbstractController
     public function ajouter(Produit $produit, Request $request, PanierService $panier): Response
     {
         if (!$this->isCsrfTokenValid('panier', $request->request->get('_token'))) {
-            throw $this->createAccessDeniedException('Jeton de sécurité invalide.');
+            throw new BadRequestHttpException('Jeton de sécurité invalide.');
         }
 
         // Les options arrivent sous la forme : ['Taille' => 'M', 'Couleur' => 'Noir']
@@ -47,7 +48,7 @@ final class PanierController extends AbstractController
     public function supprimer(string $cle, Request $request, PanierService $panier): Response
     {
         if (!$this->isCsrfTokenValid('panier', $request->request->get('_token'))) {
-            throw $this->createAccessDeniedException('Jeton de sécurité invalide.');
+            throw new BadRequestHttpException('Jeton de sécurité invalide.');
         }
 
         $panier->supprimer($cle);

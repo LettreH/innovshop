@@ -10,6 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProduitRepository::class)]
+#[ORM\Index(name: 'idx_produit_date_ajout', columns: ['date_ajout'])]
+#[ORM\Index(name: 'idx_produit_ala_une', columns: ['ala_une'])]
 class Produit
 {
     #[ORM\Id]
@@ -62,8 +64,8 @@ class Produit
     {
         return $this->nom ?? '';
     }
-    
-        /**
+
+    /**
      * Range les options par nom.
      * Exemple : ['Taille' => ['S', 'M', 'L'], 'Couleur' => ['Gris', 'Noir']]
      */

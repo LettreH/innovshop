@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Oups - InnovShop{% endblock %}
+
+{% block body %}
+    <div class="text-center py-5">
+        <p class="display-1">⚠️</p>
+        <h1 class="display-5 fw-bold">Une erreur est survenue</h1>
+        <p class="lead">Nos ingénieurs du futur sont déjà sur le coup. Merci de réessayer dans quelques instants.</p>
+        <a href="{{ path('app_home') }}" class="btn btn-primary">Retour à l'accueil</a>
+    </div>
+{% endblock %}

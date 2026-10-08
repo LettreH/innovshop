@@ -33,7 +33,7 @@ class Adresse
     {
         return $this->rue . ', ' . $this->codePostal . ' ' . $this->ville;
     }
-    
+
     public function getId(): ?int
     {
         return $this->id;

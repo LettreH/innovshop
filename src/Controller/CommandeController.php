@@ -8,6 +8,7 @@ use App\Entity\LigneCommande;
 use App\Form\AdresseType;
 use App\Repository\CommandeRepository;
 use App\Service\PanierService;
+use App\Security\Voter\AdresseVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -68,9 +69,9 @@ final class CommandeController extends AbstractController
 
     // ===== ÉTAPE 3 : récapitulatif avant validation =====
     #[Route('/confirmation/{id}', name: 'app_commande_confirmation', requirements: ['id' => '\d+'])]
+    #[IsGranted(AdresseVoter::GERER, subject: 'adresse')]
     public function confirmation(Adresse $adresse, PanierService $panier): Response
     {
-        $this->verifierAdresse($adresse);
 
         if ($panier->getNombre() === 0) {
             return $this->redirectToRoute('app_panier');
@@ -85,6 +86,7 @@ final class CommandeController extends AbstractController
 
     // ===== VALIDATION : enregistrement en base + email =====
     #[Route('/valider/{id}', name: 'app_commande_valider', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[IsGranted(AdresseVoter::GERER, subject: 'adresse')]
     public function valider(
         Adresse $adresse,
         Request $request,
@@ -92,7 +94,6 @@ final class CommandeController extends AbstractController
         EntityManagerInterface $em,
         MailerInterface $mailer
     ): Response {
-        $this->verifierAdresse($adresse);
 
         if (!$this->isCsrfTokenValid('valider-commande', $request->request->get('_token'))) {
             throw $this->createAccessDeniedException('Jeton de sécurité invalide.');
@@ -165,15 +166,5 @@ final class CommandeController extends AbstractController
         return $this->render('commande/merci.html.twig', [
             'commande' => $commande,
         ]);
-    }
-
-    /**
-     * Sécurité : on vérifie que l'adresse appartient bien au client connecté.
-     */
-    private function verifierAdresse(Adresse $adresse): void
-    {
-        if ($adresse->getUtilisateur()?->getId() !== $this->getUser()->getId()) {
-            throw $this->createAccessDeniedException('Cette adresse ne vous appartient pas.');
-        }
     }
 }
