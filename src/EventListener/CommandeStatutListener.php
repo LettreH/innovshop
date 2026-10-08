@@ -10,7 +10,6 @@ use Doctrine\ORM\Events;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
 
 /**
  * Envoie un email au client quand le statut de sa commande change.
@@ -46,7 +45,6 @@ class CommandeStatutListener
         unset($this->aNotifier[$cle]);
 
         $email = (new TemplatedEmail())
-            ->from(new Address('commandes@innovshop.fr', 'InnovShop'))
             ->to($commande->getUtilisateur()->getEmail())
             ->subject('Votre commande ' . $commande->getNumero() . ' : nouveau statut')
             ->htmlTemplate('emails/changement_statut.html.twig')

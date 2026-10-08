@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -134,7 +133,6 @@ final class CommandeController extends AbstractController
 
         // 4. Email de confirmation
         $email = (new TemplatedEmail())
-            ->from(new Address('commandes@innovshop.fr', 'InnovShop'))
             ->to($this->getUser()->getEmail())
             ->subject('Confirmation de votre commande ' . $commande->getNumero())
             ->htmlTemplate('emails/confirmation_commande.html.twig')
