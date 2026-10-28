@@ -4,7 +4,7 @@ Boutique en ligne d'**objets futuristes** (voyage temporel, mobilité, domotique
 
 > Projet réalisé pour une cliente fictive, **Madame Leroy**, qui souhaitait une plateforme e-commerce complète : catalogue, panier, commande en plusieurs étapes, espace client et back-office.
 
-![Lighthouse](https://img.shields.io/badge/Lighthouse-100%20%2F%20100%20%2F%20100%20%2F%20100-brightgreen)
+![Lighthouse](https://img.shields.io/badge/Lighthouse-4%C3%97100-brightgreen)
 ![Symfony](https://img.shields.io/badge/Symfony-7.4%20LTS-black)
 ![PHP](https://img.shields.io/badge/PHP-8.2%2B-777BB4)
 ![Tests](https://img.shields.io/badge/PHPUnit-17%20tests-success)
@@ -126,6 +126,8 @@ migrations/              → Historique de la structure de la base
 - Images en **lazy loading**, meta description, `robots.txt`
 - **Lighthouse (production) : 100 / 100 / 100 / 100** (performances, accessibilité, bonnes pratiques, SEO)
 
+![Audit Lighthouse du site en production : 100 dans les 4 catégories](docs/lighthouse.png)
+
 ---
 
 ## 💻 Installation en local
@@ -176,6 +178,8 @@ php vendor/bin/phpunit
 ```
 
 Résultat : **OK (17 tests, 35 assertions)**
+
+![Résultat de php vendor/bin/phpunit : OK (17 tests, 35 assertions)](docs/phpunit.png)
 
 | Type | Fichier | Ce qui est vérifié |
 |---|---|---|
